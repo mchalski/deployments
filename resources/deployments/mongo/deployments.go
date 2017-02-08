@@ -214,6 +214,11 @@ func (d *DeploymentsStorage) UpdateStats(id string, state_from, state_to string)
 		return ErrStorageInvalidID
 	}
 
+	// client may resend the same status - no update
+	if state_from == state_to {
+		return nil
+	}
+
 	session := d.session.Copy()
 	defer session.Close()
 
